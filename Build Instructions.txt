@@ -1,0 +1,6 @@
+To build the database, 
+first you have to make sure the local databse is clear. 
+Then delete all migrations (the cs files) in the migrations folder.
+Example: If you wanted to build the user table, 
+first insert the command in the NuGet Console 'add-migration AddUserToDb' 
+and then after the build finishes you will enter 'update-database'

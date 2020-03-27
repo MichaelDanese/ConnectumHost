@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29911.84
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectumAPI", "ConnectumAPI\ConnectumAPI.csproj", "{B4D07E63-A1C9-415A-8919-882BBC21FCBB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B4D07E63-A1C9-415A-8919-882BBC21FCBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4D07E63-A1C9-415A-8919-882BBC21FCBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4D07E63-A1C9-415A-8919-882BBC21FCBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4D07E63-A1C9-415A-8919-882BBC21FCBB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3C02D686-370A-4E08-828A-AADF53BED90C}
+	EndGlobalSection
+EndGlobal
