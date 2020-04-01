@@ -17,6 +17,7 @@ namespace ConnectumAPI.Mapper
             CreateMap<User, RegisterUserDTO>().ReverseMap();
             CreateMap<User, LoginUserDTO>().ReverseMap();
             CreateMap<User, UserAuthenticatedDTO>().ReverseMap();
+            CreateMap<Friend, FriendDTO>().ReverseMap();
         }
     }
 }

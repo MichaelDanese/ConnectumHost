@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <Folder Include="BackendServices\Resources\Images\" />
+    <Folder Include="Persistence\Migrations\" />
   </ItemGroup>
 
 
