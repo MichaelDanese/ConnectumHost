@@ -27,7 +27,7 @@ namespace ConnectumAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{User1ID:int}")]
+        [HttpGet("friends/{User1ID:int}")]
         public IActionResult GetFriends(int User1ID)
         {
             var objectList = _friendRepository.GetFriends(User1ID);
@@ -41,7 +41,7 @@ namespace ConnectumAPI.Controllers
             return Ok(dto);
         }
 
-        [HttpGet("{User1ID:int}")]
+        [HttpGet("pending/{User1ID:int}")]
         public IActionResult GetPending(int User1ID)
         {
             var objectList = _friendRepository.GetPending(User1ID);
@@ -55,7 +55,7 @@ namespace ConnectumAPI.Controllers
             return Ok(dto);
         }
 
-        [HttpGet("{User1ID:int}")]
+        [HttpGet("blocked1/{User1ID:int}")]
         public IActionResult GetBlockedUser1(int User1ID)
         {
             var objectList = _friendRepository.GetBlockedUser1(User1ID);
@@ -69,7 +69,7 @@ namespace ConnectumAPI.Controllers
             return Ok(dto);
         }
 
-        [HttpGet("{User1ID:int}")]
+        [HttpGet("blocked2/{User1ID:int}")]
         public IActionResult GetBlockedUser2(int User1ID)
         {
             var objectList = _friendRepository.GetBlockedUser2(User1ID);
@@ -83,7 +83,7 @@ namespace ConnectumAPI.Controllers
             return Ok(dto);
         }
 
-        [HttpGet("{User1ID:int}")]
+        [HttpGet("blockedboth/{User1ID:int}")]
         public IActionResult GetBlockedUserBoth(int User1ID)
         {
             var objectList = _friendRepository.GetBlockedUserBoth(User1ID);
@@ -97,7 +97,7 @@ namespace ConnectumAPI.Controllers
             return Ok(dto);
         }
 
-        [HttpGet("{User1ID:int}")]
+        [HttpGet("requests/{User1ID:int}")]
         public IActionResult GetRequests(int User1ID)
         {
             var objectList = _friendRepository.GetRequests(User1ID);
@@ -111,7 +111,7 @@ namespace ConnectumAPI.Controllers
             return Ok(dto);
         }
 
-        [HttpGet("{User1ID:int}/{User2ID:int}")]
+        [HttpGet("relationship/{User1ID:int}/{User2ID:int}")]
         public IActionResult GetRelationship(int User1ID, int User2ID)
         {
             var obj = _friendRepository.GetRelationship(User1ID, User2ID);
@@ -123,7 +123,7 @@ namespace ConnectumAPI.Controllers
             return Ok(dto);
         }
 
-        [HttpGet("{User1ID:int}/{User2ID:int}")]
+        [HttpGet("friend/{User1ID:int}/{User2ID:int}")]
         public IActionResult GetFriend(int User1ID, int User2ID)
         {
             var obj = _friendRepository.GetFriend(User1ID, User2ID);
