@@ -19,6 +19,7 @@ using ConnectumAPI.Mapper;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using ConnectumAPI.SignalR.Hubs;
 
 namespace ConnectumAPI
 {
@@ -35,6 +36,7 @@ namespace ConnectumAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
+            services.AddSignalR();
             services.AddDbContext<ApplicationDbContext>
                 (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -102,6 +104,7 @@ namespace ConnectumAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chatHub");
             });
         }
     }
