@@ -135,7 +135,6 @@ namespace ConnectumAPI.Controllers
             return Ok(dto.Type);
         }
 
-        [AllowAnonymous]
         [HttpPost("delete")]
         public IActionResult DeleteRelationship([FromBody] FriendDTO friendDTO)
         {
@@ -157,7 +156,6 @@ namespace ConnectumAPI.Controllers
             return Ok();
         }
 
-        [AllowAnonymous]
         [HttpPost("create")]
         public IActionResult CreateRelationship([FromBody] FriendDTO friendDTO)
         {
@@ -183,7 +181,6 @@ namespace ConnectumAPI.Controllers
             return Ok();
         }
 
-        [AllowAnonymous]
         [HttpPost("update")]
         public IActionResult UpdateRelationship([FromBody] FriendDTO friendDTO)
         {
