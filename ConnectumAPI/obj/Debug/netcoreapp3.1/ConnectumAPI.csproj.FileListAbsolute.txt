@@ -527,4 +527,3 @@ C:\Users\User\Documents\GitHub\ConnectumHost\ConnectumAPI\obj\Debug\netcoreapp3.
 C:\Users\User\Documents\GitHub\ConnectumHost\ConnectumAPI\obj\Debug\netcoreapp3.1\ConnectumAPI.csproj.CopyComplete
 C:\Users\User\Documents\GitHub\ConnectumHost\ConnectumAPI\obj\Debug\netcoreapp3.1\ConnectumAPI.dll
 C:\Users\User\Documents\GitHub\ConnectumHost\ConnectumAPI\obj\Debug\netcoreapp3.1\ConnectumAPI.pdb
-C:\Users\User\Documents\GitHub\ConnectumHost\ConnectumAPI\obj\Debug\netcoreapp3.1\ConnectumAPI.csprojAssemblyReference.cache

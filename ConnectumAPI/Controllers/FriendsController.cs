@@ -55,7 +55,7 @@ namespace ConnectumAPI.Controllers
             return Ok(dto);
         }
 
-        [HttpGet("blocked1/{User1ID:int}")]
+        [HttpGet("block1/{User1ID:int}")]
         public IActionResult GetBlockedUser1(int User1ID)
         {
             var objectList = _friendRepository.GetBlockedUser1(User1ID);
@@ -69,7 +69,7 @@ namespace ConnectumAPI.Controllers
             return Ok(dto);
         }
 
-        [HttpGet("blocked2/{User1ID:int}")]
+        [HttpGet("block2/{User1ID:int}")]
         public IActionResult GetBlockedUser2(int User1ID)
         {
             var objectList = _friendRepository.GetBlockedUser2(User1ID);
@@ -83,7 +83,7 @@ namespace ConnectumAPI.Controllers
             return Ok(dto);
         }
 
-        [HttpGet("blockedboth/{User1ID:int}")]
+        [HttpGet("blockboth/{User1ID:int}")]
         public IActionResult GetBlockedUserBoth(int User1ID)
         {
             var objectList = _friendRepository.GetBlockedUserBoth(User1ID);
@@ -120,7 +120,7 @@ namespace ConnectumAPI.Controllers
                 return NotFound();
             }
             var dto = _mapper.Map<FriendDTO>(obj);
-            return Ok(dto);
+            return Ok(dto.Type);
         }
 
         [HttpGet("friend/{User1ID:int}/{User2ID:int}")]
@@ -132,11 +132,33 @@ namespace ConnectumAPI.Controllers
                 return NotFound();
             }
             var dto = _mapper.Map<FriendDTO>(obj);
-            return Ok(dto);
+            return Ok(dto.Type);
         }
 
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPost("delete")]
+        public IActionResult DeleteRelationship([FromBody] FriendDTO friendDTO)
+        {
+            if (friendDTO == null)
+            {
+                return BadRequest(ModelState);
+            }
+            if (!_friendRepository.RelationshipExists(friendDTO.User1ID, friendDTO.User2ID))
+            {
+                ModelState.AddModelError("", "Relationship doesn't exists...");
+                return StatusCode(404, ModelState);
+            }
+            var friendObj = _mapper.Map<Friend>(friendDTO);
+            var obj = _friendRepository.DeleteRelationship(friendObj);
+            if (obj == false)
+            {
+                return BadRequest(ModelState);
+            }
+            return Ok();
+        }
+
+        [AllowAnonymous]
+        [HttpPost("create")]
         public IActionResult CreateRelationship([FromBody] FriendDTO friendDTO)
         {
             if (friendDTO == null)
@@ -155,11 +177,32 @@ namespace ConnectumAPI.Controllers
             var friendObj = _mapper.Map<Friend>(friendDTO);
             if (!_friendRepository.CreateRelationship(friendObj))
             {
-                ModelState.AddModelError("", $"Error when saving record... {friendObj.User1ID}/{friendObj.User2ID}");
+                ModelState.AddModelError("", $"Error when saving relationship record... {friendObj.User1ID}/{friendObj.User2ID}");
                 return StatusCode(500, ModelState);
             }
             return Ok();
+        }
 
+        [AllowAnonymous]
+        [HttpPost("update")]
+        public IActionResult UpdateRelationship([FromBody] FriendDTO friendDTO)
+        {
+            if (friendDTO == null)
+            {
+                return BadRequest(ModelState);
+            }
+            if (!_friendRepository.RelationshipExists(friendDTO.User1ID, friendDTO.User2ID))
+            {
+                ModelState.AddModelError("", "Relationship doesn't exists...");
+                return StatusCode(404, ModelState);
+            }
+            var friendObj = _mapper.Map<Friend>(friendDTO);
+            var obj = _friendRepository.UpdateRelationship(friendObj);
+            if (obj == false)
+            {
+                return BadRequest(ModelState);
+            }
+            return Ok();
         }
     }
 }

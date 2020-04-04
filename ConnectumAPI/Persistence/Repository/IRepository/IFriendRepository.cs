@@ -16,7 +16,7 @@ namespace ConnectumAPI.Repository.IRepository
         ICollection<Friend> GetBlockedUser2(int User1ID);
         ICollection<Friend> GetBlockedUserBoth(int User1ID);
         ICollection<Friend> GetRequests(int User1ID);
-        string GetRelationship(int User1ID, int User2ID);
+        Friend GetRelationship(int User1ID, int User2ID);
         Friend GetFriend(int User1ID, int User2ID);
         bool CreateRelationship(Friend friend);
         bool UpdateRelationship(Friend friend);

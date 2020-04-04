@@ -39,6 +39,7 @@ namespace ConnectumAPI
                 (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IFriendRepository, FriendRepository>();
             services.AddAutoMapper(typeof(ConnectumMappings));
 
             services.AddSwaggerGen(options =>

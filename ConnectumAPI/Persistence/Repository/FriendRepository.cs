@@ -15,7 +15,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConnectumAPI.Persistence.Repository
+namespace ConnectumAPI.Repository
 {
 
     public class FriendRepository : IFriendRepository
@@ -30,106 +30,46 @@ namespace ConnectumAPI.Persistence.Repository
 
         public ICollection<Friend> GetFriends(int User1ID)
         {
-            var objList = _db.Friends.OrderBy(a => a.User1ID == User1ID).ToList();
-            if (objList != null)
-            {
-                foreach (var i in objList)
-                {
-                    if (i.Type != "friend")
-                    {
-                        objList.Remove(i);
-                    }
-                }
-            }
+            var objList = _db.Friends.Where(a => a.User1ID == User1ID & a.Type == "friend").ToList();
             return objList;
         }
 
         public ICollection<Friend> GetPending(int User1ID)
         {
-            var objList = _db.Friends.OrderBy(a => a.User1ID == User1ID).ToList();
-            if (objList != null)
-            {
-                foreach (var i in objList)
-                {
-                    if (i.Type != "pending_user1")
-                    {
-                        objList.Remove(i);
-                    }
-                }
-            }
+            var objList = _db.Friends.Where(a => a.User1ID == User1ID & a.Type == "pending1").ToList();
             return objList;
         }
 
         public ICollection<Friend> GetBlockedUser1(int User1ID)
         {
-            var objList = _db.Friends.OrderBy(a => a.User1ID == User1ID).ToList();
-            if (objList != null)
-            {
-                foreach (var i in objList)
-                {
-                    if (i.Type != "blocked_user1")
-                    {
-                        objList.Remove(i);
-                    }
-                }
-            }
+            var objList = _db.Friends.Where(a => a.User1ID == User1ID & a.Type == "block1").ToList();
             return objList;
 
         }
 
         public ICollection<Friend> GetBlockedUser2(int User1ID)
         {
-            var objList = _db.Friends.OrderBy(a => a.User1ID == User1ID).ToList();
-            if (objList != null)
-            {
-                foreach (var i in objList)
-                {
-                    if (i.Type != "blocked_user2")
-                    {
-                        objList.Remove(i);
-                    }
-                }
-            }
+            var objList = _db.Friends.Where(a => a.User1ID == User1ID & a.Type == "block2").ToList();
             return objList;
         }
 
         public ICollection<Friend> GetBlockedUserBoth(int User1ID)
         {
-            var objList = _db.Friends.OrderBy(a => a.User1ID == User1ID).ToList();
-            if (objList != null)
-            {
-                foreach (var i in objList)
-                {
-                    if (i.Type != "blocked")
-                    {
-                        objList.Remove(i);
-                    }
-                }
-            }
+            var objList = _db.Friends.Where(a => a.User1ID == User1ID & a.Type == "block").ToList();
             return objList;
         }
 
         public ICollection<Friend> GetRequests(int User1ID)
         {
-            var objList = _db.Friends.OrderBy(a => a.User1ID == User1ID).ToList();
-            if (objList != null)
-            {
-                foreach (var i in objList)
-                {
-                    if (i.Type != "pending_user2")
-                    {
-                        objList.Remove(i);
-                    }
-                }
-            }
+            var objList = _db.Friends.Where(a => a.User1ID == User1ID & a.Type == "pending2").ToList();
             return objList;
 
         }
 
-        public string GetRelationship(int User1ID, int User2ID)
+        public Friend GetRelationship(int User1ID, int User2ID)
         {
             var obj = _db.Friends.FirstOrDefault(a => a.User1ID == User1ID & a.User2ID == User2ID);
-            return obj.Type;
+            return obj;
         }
 
         public Friend GetFriend(int User1ID, int User2ID)
