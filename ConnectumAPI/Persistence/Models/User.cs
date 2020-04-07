@@ -25,7 +25,6 @@ namespace ConnectumAPI.Models
         [Required]
         public bool PublicName { get; set; }
         public string ProfilePic { get; set; }
-        public Friend FriendList { get; set; }
         [NotMapped]
         public string Token { get; set; }//This is going to be used for authentication
 

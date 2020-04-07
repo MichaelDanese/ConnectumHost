@@ -2,20 +2,21 @@
 
 namespace ConnectumAPI.Migrations
 {
-    public partial class AddUserToDb : Migration
+    public partial class EthanMig : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Friend",
+                name: "Friends",
                 columns: table => new
                 {
-                    FriendName = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
+                    User1ID = table.Column<int>(nullable: false),
+                    User2ID = table.Column<int>(nullable: false),
+                    Type = table.Column<string>(maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Friend", x => x.FriendName);
+                    table.PrimaryKey("PK_Friends", x => new { x.User1ID, x.User2ID });
                 });
 
             migrationBuilder.CreateTable(
@@ -29,33 +30,21 @@ namespace ConnectumAPI.Migrations
                     Password = table.Column<string>(nullable: false),
                     Email = table.Column<string>(maxLength: 50, nullable: false),
                     PublicName = table.Column<bool>(nullable: false),
-                    ProfilePic = table.Column<string>(nullable: true),
-                    FriendListFriendName = table.Column<int>(nullable: true)
+                    ProfilePic = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserId);
-                    table.ForeignKey(
-                        name: "FK_Users_Friend_FriendListFriendName",
-                        column: x => x.FriendListFriendName,
-                        principalTable: "Friend",
-                        principalColumn: "FriendName",
-                        onDelete: ReferentialAction.Restrict);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_FriendListFriendName",
-                table: "Users",
-                column: "FriendListFriendName");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Friends");
 
             migrationBuilder.DropTable(
-                name: "Friend");
+                name: "Users");
         }
     }
 }

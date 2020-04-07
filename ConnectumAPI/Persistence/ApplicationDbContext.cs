@@ -13,6 +13,12 @@ namespace ConnectumAPI.Persistence
         
         }
         public DbSet<User> Users { get; set; }
+        public DbSet<Friend> Friends { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Friend>().HasKey(c => new { c.User1ID, c.User2ID });
+        }
         
     }
 }
