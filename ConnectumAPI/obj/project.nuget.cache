@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "QHLjJblBjHM5FI6uz9FHfSAC1dNpAi5VwECugYj77yFRG+Qe3psEBOTCXnvOvBatdvyyaWpqJjSTo+Ra+FiJJA==",
+  "dgSpecHash": "/b19E6rh5g6xQfFV2CvNBn/3Tz6kLipKYNcUlJhAdqZXHAXmmyUDP4KrS18TnhvtptkFQCsoRYNRfMawTYF1+w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Michael\\Downloads\\Host-master\\Host-master\\ConnectumAPI\\ConnectumAPI.csproj",
+  "projectFilePath": "C:\\Users\\Michael\\Documents\\GitHub\\ConnectumHost\\ConnectumAPI\\ConnectumAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Michael\\.nuget\\packages\\automapper\\9.0.0\\automapper.9.0.0.nupkg.sha512",
     "C:\\Users\\Michael\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\7.0.0\\automapper.extensions.microsoft.dependencyinjection.7.0.0.nupkg.sha512",
