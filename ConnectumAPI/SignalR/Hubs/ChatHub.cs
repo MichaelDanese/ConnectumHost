@@ -14,7 +14,7 @@ namespace ConnectumAPI.SignalR.Hubs
 {
     [Authorize]
     public class ChatHub : Hub
-    {
+    {//Remember that an instance of a hub is created for every request
         private readonly ApplicationDbContext _db;
 
         public ChatHub(ApplicationDbContext db)
@@ -23,7 +23,7 @@ namespace ConnectumAPI.SignalR.Hubs
         }
 
         public override async Task OnConnectedAsync()
-        {
+        {//This will run when a connection is built between the client and the server
             Connection adder = new Connection();
             adder.ConnectionID = Context.ConnectionId;
             int name = Int32.Parse(Context.User.Identity.Name);
@@ -35,7 +35,7 @@ namespace ConnectumAPI.SignalR.Hubs
             await base.OnConnectedAsync();
         }
         public override async Task OnDisconnectedAsync(Exception ex)
-        {
+        {//Ran when the user disconnects
             var connectionId = Context.ConnectionId;
             var obj = _db.Connections.FirstOrDefault(a => a.ConnectionID == connectionId);
             var partner = obj.Partner;
@@ -54,7 +54,7 @@ namespace ConnectumAPI.SignalR.Hubs
             await base.OnDisconnectedAsync(ex);
         }
         public async Task DisconnectToUser(string connectionId)
-        {
+        {//Rand when one client wants to stop chatting with the other user
             await Clients.Client(connectionId).SendAsync("Disconnected");
 
         }
@@ -70,6 +70,11 @@ namespace ConnectumAPI.SignalR.Hubs
                 searchTwo.Partner = null;
                 search.Interest = null;
                 searchTwo.Interest = null;
+                search.InterestMatch = null;
+                searchTwo.InterestMatch = null;
+                searchTwo.Interest = null;
+                search.SearchType = null;
+                searchTwo.SearchType = null;
                 _db.Update(search);
                 _db.Update(searchTwo);
                 _db.SaveChanges();
@@ -89,10 +94,12 @@ namespace ConnectumAPI.SignalR.Hubs
         }
         public Task FinishGreet(Connection greeter, Connection greeted)
         {
+            string interest = greeter.InterestMatch;
+            interest = interest.Replace("&&", " and ");
             Message output = new Message();
             output.connectionID = greeter.ConnectionID;
             output.name = greeter.Name;
-            output.message = "You are now chatting with " + output.name;
+            output.message = "You are now chatting with " + output.name + " about " + interest;
             return Clients.Client(greeted.ConnectionID).SendAsync("StartMessage", output);
         }
         public string[] parseInterests(string interests)
@@ -103,21 +110,22 @@ namespace ConnectumAPI.SignalR.Hubs
             }
             return interests.Split("||"); 
         }
-        public bool compareInterests(string[] interestPool, string interest)
+        public string compareInterests(string[] interestPool, string interest)
         {
             if (interestPool == null || interest == null)
             {
-                return false;
+                return null;
             }
 
             foreach (var i in interestPool)
             {
                 if (i == interest)
                 {
-                    return true;
+
+                    return i;
                 }
             }
-            return false;
+            return null;
         }
         public async Task ConnectUsersTogether(string interests, string chatType)
         {
@@ -135,13 +143,17 @@ namespace ConnectumAPI.SignalR.Hubs
             Connection possibleMatch = null;
             Connection[] matches = null;
             matches = _db.Connections.Where(a => (a.Partner == null && a.SearchType == chatType && a.ConnectionID != Context.ConnectionId)).ToArray();
+            string matchedInterest = null;
             foreach (var i in parsedString)
             {
                 foreach (var j in matches)
                 {
-                    if (compareInterests(parseInterests(j.Interest), i))
+                    matchedInterest = compareInterests(parseInterests(j.Interest), i);
+                    if (matchedInterest != null)
                     {
+                        currentUser.InterestMatch = matchedInterest;
                         possibleMatch = j;
+                        possibleMatch.InterestMatch = matchedInterest;
                         break;
                     }
                 }
