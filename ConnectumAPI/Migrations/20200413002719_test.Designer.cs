@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConnectumAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200404045404_EthanMig")]
-    partial class EthanMig
+    [Migration("20200413002719_test")]
+    partial class test
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -73,6 +73,28 @@ namespace ConnectumAPI.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ConnectumAPI.Persistence.Models.Connection", b =>
+                {
+                    b.Property<string>("ConnectionID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Interest")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Partner")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PartnerName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ConnectionID");
+
+                    b.ToTable("Connections");
                 });
 #pragma warning restore 612, 618
         }

@@ -2,10 +2,25 @@
 
 namespace ConnectumAPI.Migrations
 {
-    public partial class EthanMig : Migration
+    public partial class test : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Connections",
+                columns: table => new
+                {
+                    ConnectionID = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Interest = table.Column<string>(nullable: true),
+                    Partner = table.Column<string>(nullable: true),
+                    PartnerName = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Connections", x => x.ConnectionID);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Friends",
                 columns: table => new
@@ -40,6 +55,9 @@ namespace ConnectumAPI.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Connections");
+
             migrationBuilder.DropTable(
                 name: "Friends");
 

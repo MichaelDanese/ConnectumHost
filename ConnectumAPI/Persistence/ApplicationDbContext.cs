@@ -1,4 +1,5 @@
 ﻿using ConnectumAPI.Models;
+using ConnectumAPI.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace ConnectumAPI.Persistence
         
         }
         public DbSet<User> Users { get; set; }
+        public DbSet<Connection> Connections { get; set; }
         public DbSet<Friend> Friends { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

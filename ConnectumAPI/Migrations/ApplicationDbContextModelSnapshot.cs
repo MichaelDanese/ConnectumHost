@@ -72,6 +72,28 @@ namespace ConnectumAPI.Migrations
 
                     b.ToTable("Users");
                 });
+
+            modelBuilder.Entity("ConnectumAPI.Persistence.Models.Connection", b =>
+                {
+                    b.Property<string>("ConnectionID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Interest")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Partner")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PartnerName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ConnectionID");
+
+                    b.ToTable("Connections");
+                });
 #pragma warning restore 612, 618
         }
     }
