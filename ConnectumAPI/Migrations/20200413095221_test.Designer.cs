@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConnectumAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200413002719_test")]
+    [Migration("20200413095221_test")]
     partial class test
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -83,6 +83,9 @@ namespace ConnectumAPI.Migrations
                     b.Property<string>("Interest")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("InterestMatch")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -90,6 +93,9 @@ namespace ConnectumAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PartnerName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SearchType")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ConnectionID");

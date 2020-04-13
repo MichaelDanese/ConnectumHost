@@ -13,6 +13,8 @@ namespace ConnectumAPI.Migrations
                     ConnectionID = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Interest = table.Column<string>(nullable: true),
+                    InterestMatch = table.Column<string>(nullable: true),
+                    SearchType = table.Column<string>(nullable: true),
                     Partner = table.Column<string>(nullable: true),
                     PartnerName = table.Column<string>(nullable: true)
                 },

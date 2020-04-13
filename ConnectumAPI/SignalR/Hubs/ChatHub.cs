@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -67,6 +68,8 @@ namespace ConnectumAPI.SignalR.Hubs
                 var two = search.Partner;
                 search.Partner = null;
                 searchTwo.Partner = null;
+                search.Interest = null;
+                searchTwo.Interest = null;
                 _db.Update(search);
                 _db.Update(searchTwo);
                 _db.SaveChanges();
@@ -84,93 +87,107 @@ namespace ConnectumAPI.SignalR.Hubs
             return Clients.Client(connectionId).SendAsync("ReceiveMessage", output);
 
         }
-        public Task GreetUser(string connectionId)
-        {
-            if (connectionId == Context.ConnectionId)
-            {
-                Message outputs = new Message();
-                outputs.connectionID = "";
-                outputs.name = "You";
-                outputs.message = "You cannot connect to yourself!";
-                return Clients.Client(Context.ConnectionId).SendAsync("DenialMessage", outputs);
-            }
-            var obj = _db.Connections.FirstOrDefault(a => a.ConnectionID == connectionId);
-            var objTwo = _db.Connections.FirstOrDefault(a => a.ConnectionID == Context.ConnectionId);
-
-            if (obj != null && objTwo != null && obj.Partner == null && objTwo.Partner == null)
-            {
-                obj.Partner = objTwo.ConnectionID;
-                _db.Connections.Update(obj);
-                objTwo.Partner = obj.ConnectionID;
-                _db.Connections.Update(objTwo);
-                _db.SaveChanges();
-                Message outputs = new Message();
-                outputs.connectionID = Context.ConnectionId;
-                outputs.name = _db.Connections.FirstOrDefault(a => a.ConnectionID == Context.ConnectionId).Name; ;
-                outputs.message = "You are now chatting with " + outputs.name;
-                return Clients.Client(connectionId).SendAsync("GreetMessage", outputs);
-            }
-            Message output = new Message();
-            output.connectionID = "";
-            output.name = "You";
-            output.message = connectionId + " has already started a conversation with another user.";
-            return Clients.Client(Context.ConnectionId).SendAsync("DenialMessage", output);
-        }
-        public Task FinishGreet(string client)
+        public Task FinishGreet(Connection greeter, Connection greeted)
         {
             Message output = new Message();
-            output.connectionID = Context.ConnectionId;
-            output.name = _db.Connections.FirstOrDefault(a => a.ConnectionID == Context.ConnectionId).Name;
+            output.connectionID = greeter.ConnectionID;
+            output.name = greeter.Name;
             output.message = "You are now chatting with " + output.name;
-            return Clients.Client(client).SendAsync("StartMessage", output);
+            return Clients.Client(greeted.ConnectionID).SendAsync("StartMessage", output);
         }
-        public Task PostInterest(string interests)
+        public string[] parseInterests(string interests)
         {
-            SearchQuery values = new SearchQuery();
-            var obj = _db.Connections.FirstOrDefault(a => a.ConnectionID == Context.ConnectionId);
-            if (obj != null)
+            if (interests == null)
             {
-                obj.Interest = interests;
-                _db.Connections.Update(obj);
-                _db.SaveChanges();
-                
-                var objList = _db.Connections.Where(a => a.Interest == interests).ToList();
-                
-                if (objList != null)
-                {
-                    values.found = "true";
-                    values.message = "Success! These are the users found with similar interests...";
-                    List<string> lister = new List<string>();
-                    foreach (var i in objList)
-                    {
-                        if (i.ConnectionID != Context.ConnectionId)
-                        {
-                            lister.Add(i.ConnectionID);
-                        } 
-                    }
-                    values.results = lister.ToArray();
-                    if (values.results.Length == 0)
-                    {
-                        values.found = "false";
-                        values.message = "No users were found with similar interests. Please wait or search another tag...";
-                    }
-                }
-                else
-                {
-                    values.message = "No users were found with similar interests. Please wait or search another tag...";
-                    values.found = "false";
-                }
+                return null;
+            }
+            return interests.Split("||"); 
+        }
+        public bool compareInterests(string[] interestPool, string interest)
+        {
+            if (interestPool == null || interest == null)
+            {
+                return false;
+            }
 
+            foreach (var i in interestPool)
+            {
+                if (i == interest)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public async Task ConnectUsersTogether(string interests, string chatType)
+        {
+            if (interests == null || chatType == null)
+            {
+                Message output = new Message();
+                output.connectionID = Context.ConnectionId;
+                output.name = "You";
+                output.message = "Invalid search query!";
+                await Clients.Client(Context.ConnectionId).SendAsync("DenialMessage", output);
+                return;
+            }
+            var currentUser = _db.Connections.FirstOrDefault(a => a.ConnectionID == Context.ConnectionId);
+            var parsedString = parseInterests(interests);
+            Connection possibleMatch = null;
+            Connection[] matches = null;
+            matches = _db.Connections.Where(a => (a.Partner == null && a.SearchType == chatType && a.ConnectionID != Context.ConnectionId)).ToArray();
+            foreach (var i in parsedString)
+            {
+                foreach (var j in matches)
+                {
+                    if (compareInterests(parseInterests(j.Interest), i))
+                    {
+                        possibleMatch = j;
+                        break;
+                    }
+                }
+                if (possibleMatch != null)
+                {
+                    break;
+                }
+            }
+            
+            if (possibleMatch != null && currentUser != null)
+            {//Will start the process of matching the users together. 
+                possibleMatch.Partner = currentUser.ConnectionID;
+                currentUser.Partner = possibleMatch.ConnectionID;
+                _db.Connections.Update(possibleMatch);
+                _db.Connections.Update(currentUser);
+                _db.SaveChanges();
+                possibleMatch.PartnerName = currentUser.Name;
+                currentUser.PartnerName = possibleMatch.Name;
+                currentUser.Interest = interests;
+                _db.Connections.Update(possibleMatch);
+                _db.Connections.Update(currentUser);
+                _db.SaveChanges();
+                await FinishGreet(possibleMatch, currentUser);
+                await FinishGreet(currentUser, possibleMatch);
+            }
+            else if (possibleMatch != null && currentUser == null)
+            {//If there is an error and the searcher is not in the database
+                Message output = new Message();
+                output.connectionID = Context.ConnectionId;
+                output.name = "You";
+                output.message = "Critical Error: Current connection is not found in database...";
+                await Clients.Client(Context.ConnectionId).SendAsync("DenialMessage", output);
             }
             else
-            {
-                values.message = "Error! Cannot find you in database...";
-                values.found = "false";
+            {//Will start the process of making the searcher watch their connection until someone 'claims' them
+                currentUser.Interest = interests;
+                currentUser.SearchType = chatType;
+                _db.Connections.Update(currentUser);
+                _db.SaveChanges();
+                Message output = new Message();
+                output.connectionID = Context.ConnectionId;
+                output.name = "You";
+                output.message = "Search submitted. Please wait to be connected or search for another interest...";
+                await Clients.Client(Context.ConnectionId).SendAsync("DenialMessage", output);
+                return;
             }
-            var json = JsonConvert.SerializeObject(values);
-            return Clients.Client(Context.ConnectionId).SendAsync("ShowConnections", json);
-
-
         }
     }
     public class Message

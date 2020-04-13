@@ -81,6 +81,9 @@ namespace ConnectumAPI.Migrations
                     b.Property<string>("Interest")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("InterestMatch")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -88,6 +91,9 @@ namespace ConnectumAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PartnerName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SearchType")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ConnectionID");
