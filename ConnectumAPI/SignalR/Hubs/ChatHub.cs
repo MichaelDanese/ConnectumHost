@@ -31,7 +31,6 @@ namespace ConnectumAPI.SignalR.Hubs
             adder.Name = obj.UserName;
             _db.Connections.Add(adder);
             _db.SaveChanges();
-            
             await base.OnConnectedAsync();
         }
         public override async Task OnDisconnectedAsync(Exception ex)
@@ -54,7 +53,7 @@ namespace ConnectumAPI.SignalR.Hubs
             await base.OnDisconnectedAsync(ex);
         }
         public async Task DisconnectToUser(string connectionId)
-        {//Rand when one client wants to stop chatting with the other user
+        {//Ran when one client wants to stop chatting with the other user
             await Clients.Client(connectionId).SendAsync("Disconnected");
 
         }
@@ -84,7 +83,7 @@ namespace ConnectumAPI.SignalR.Hubs
 
         }
         public Task SendMessageToUser( string connectionId, string input)
-        {
+        {//Ran to send message to other user
             Message output = new Message();
             output.connectionID = connectionId;
             output.name = "Stranger";
@@ -173,6 +172,7 @@ namespace ConnectumAPI.SignalR.Hubs
                 possibleMatch.PartnerName = currentUser.Name;
                 currentUser.PartnerName = possibleMatch.Name;
                 currentUser.Interest = interests;
+                currentUser.SearchType = chatType;
                 _db.Connections.Update(possibleMatch);
                 _db.Connections.Update(currentUser);
                 _db.SaveChanges();
