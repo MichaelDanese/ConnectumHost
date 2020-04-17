@@ -94,7 +94,7 @@ namespace ConnectumAPI.SignalR.Hubs
         public Task FinishGreet(Connection greeter, Connection greeted)
         {
             string interest = greeter.InterestMatch;
-            interest = interest.Replace("&&", " and ");
+            interest = interest.Replace("&&", " and ").Replace("(","").Replace(")","");
             Message output = new Message();
             output.connectionID = greeter.ConnectionID;
             output.name = greeter.Name;
