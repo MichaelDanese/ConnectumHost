@@ -1,5 +1,5 @@
 # Host
-#Funtional Requirements:
+#Funtional Requirements:<br />
   -User account creation
   -Allow real-time communication
   -API that can interact with frontend, backend, and the database.
